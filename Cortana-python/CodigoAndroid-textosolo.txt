@@ -1,0 +1,108 @@
+package com.cortana_masterchief;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private MessageAdapter messageAdapter;
+    private List<Message> messageList;
+
+    private EditText inputMessage;
+    private Button sendButton;
+
+    private DatabaseReference messagesRef;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        inputMessage = findViewById(R.id.inputMessage);
+        sendButton = findViewById(R.id.sendButton);
+
+        messageList = new ArrayList<>();
+        messageAdapter = new MessageAdapter(messageList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(messageAdapter);
+
+        // Inicializar Realtime Database
+        messagesRef = FirebaseDatabase.getInstance().getReference("chat/mensajes");
+
+        // Escuchar cambios en tiempo real
+        messagesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                messageList.clear(); // Limpiar la lista para evitar duplicados
+
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    // Convertir los datos en objetos Message
+                    Message message = messageSnapshot.getValue(Message.class);
+                    if (message != null) {
+                        messageList.add(message);
+                    }
+                }
+
+                messageAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(messageList.size() - 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Manejar errores
+                System.err.println("Error al leer datos: " + databaseError.getMessage());
+            }
+        });
+
+        // Enviar mensaje al modelo
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userMessage = inputMessage.getText().toString().trim();
+                if (!TextUtils.isEmpty(userMessage)) {
+                    sendMessage(userMessage);
+                    inputMessage.setText("");
+                }
+            }
+        });
+    }
+
+    private void sendMessage(String message) {
+        String messageId = messagesRef.push().getKey(); // Generar un ID único para el mensaje
+        if (messageId != null) {
+            Map<String, Object> messageMap = new HashMap<>();
+            messageMap.put("usuario", message);
+            messageMap.put("timestamp", System.currentTimeMillis()); // Agregar marca de tiempo
+
+            messagesRef.child(messageId).setValue(messageMap)
+                    .addOnSuccessListener(aVoid -> {
+                        // Mensaje enviado con éxito
+                        System.out.println("Mensaje enviado con éxito.");
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar error al enviar mensaje
+                        System.err.println("Error al enviar mensaje: " + e.getMessage());
+                    });
+        }
+    }
+}
