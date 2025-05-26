@@ -4,6 +4,9 @@
 ---
 
 ### **Contexto del Desarrollo**  
+
+Cortana, la emblemática inteligencia artificial del universo de videojuegos Halo, es un arquetipo de IA conversacional avanzada y compañera táctica del Jefe Maestro. Este proyecto de investigación se inspira en su complejidad para explorar la integración de LLMs en tiempo real y la arquitectura completa de un sistema de IA, sirviendo como un ejercicio práctico para comprender su stack tecnológico.
+
 Proyecto creado íntegramente por **Vicente Scheihing** como parte de su formación universitaria, con el objetivo de explorar:  
 - Integración de tecnologías emergentes  
 - Límites prácticos de los LLMs en tiempo real  
@@ -57,6 +60,5 @@ Este proyecto demuestra mi capacidad para:
 **Nota del Autor**:  
 *"Como estudiante próximo a titularme, este proyecto representa mi capacidad para investigar tecnologías emergentes y aplicarlas en soluciones innovadoras, utilizando recursos accesibles y colaboración con herramientas IA"*  
 
-[🔗 Repositorio Personal] | [📄 Memoria Técnica] | [🎓 Proyecto Académico Registrado]  
 
 *Proyecto desarrollado sin fines comerciales - Todos los componentes creados por Vicente Scheihing con apoyo de LLMs*
