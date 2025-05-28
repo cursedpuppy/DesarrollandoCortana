@@ -1,3 +1,5 @@
+⚠️Por favor leer notas al final⚠️
+
 **Cortana MasterChief - Proyecto de Investigación Individual**  
 *(Trabajo Autodidacta - 4to Año de Ingeniería)*  
 
@@ -62,3 +64,5 @@ Este proyecto demuestra mi capacidad para:
 
 
 *Proyecto desarrollado sin fines comerciales - Todos los componentes creados por Vicente Scheihing con apoyo de LLMs*
+
+⚠️Nota importante: Este proyecto no funciona porque las credenciales de Firebase fueron expuestas públicamente y deshabilitadas por seguridad. Usa tus propias credenciales de Firebase para probarlo localmente.⚠️
